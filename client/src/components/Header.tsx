@@ -5,7 +5,7 @@ const Header = () => {
     <div className="w-full flex items-center justify-between mt-2 mx-3 sm:mx-0">
       <div>
         <Link to="/">
-          <p className="text-3xl font-extrabold text-gray-800">
+          <p className="text-xl sm:text-3xl font-extrabold text-gray-800">
             Meme <span className="text-indigo-600">Gallery</span>
           </p>
         </Link>

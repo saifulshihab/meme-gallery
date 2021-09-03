@@ -1,5 +1,7 @@
 import asyncHandler from 'express-async-handler';
 import MemeModel from '../models/MemeModel';
+import fs from 'fs';
+import path from 'path';
 
 export const createMeme = asyncHandler(async (req, res) => {
   const newMeme = await MemeModel.create(req.body);
@@ -12,7 +14,7 @@ export const createMeme = asyncHandler(async (req, res) => {
 });
 
 export const getAllMemes = asyncHandler(async (req, res) => {
-  const memes = await MemeModel.find({});
+  const memes = await MemeModel.find({}).sort({ createdAt: '-1' });
   if (memes) {
     res.status(200).json(memes);
   } else {
@@ -26,8 +28,18 @@ export const deleteMeme = asyncHandler(async (req, res) => {
   const meme = await MemeModel.findById(memeId);
 
   if (meme) {
+    // delete image file from dir
+    if (meme.image.includes('dist')) {
+      fs.unlink(path.join('./' + `${meme.image}`), (err) => {
+        if (err) {
+          console.log(err);
+        } else {
+          console.log('meme deleted!');
+        }
+      });
+    }
     await meme.remove();
-    const memes = await MemeModel.find({});
+    const memes = await MemeModel.find({}).sort({ createdAt: '-1' });
     res.status(200).json(memes);
   } else {
     res.status(404);

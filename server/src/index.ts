@@ -1,9 +1,11 @@
+import path from 'path';
 import express from 'express';
 import dotenv from 'dotenv';
 import cors from 'cors';
 import connectDB from './config/connectDB';
 import { errorHandler, notFound } from './middleware/errorMiddleware';
 import memeRoutes from './routes/memeRoutes';
+import uploadRoutes from './routes/uploadRoutes';
 
 const app = express();
 
@@ -29,6 +31,11 @@ app.get('/', (req, res) => {
   res.end('Server running and up ...');
 });
 app.use('/api/meme', memeRoutes);
+app.use('/upload', uploadRoutes);
+
+app.use('/dist/uploads', express.static(path.join(__dirname, './uploads')));
+
+console.log(__dirname);
 
 // error middleware
 app.use(notFound);
