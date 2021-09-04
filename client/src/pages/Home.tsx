@@ -8,6 +8,7 @@ import { MemeType } from '../types';
 import axios from 'axios';
 
 const Home = () => {
+  const [uploading, setUploading] = useState(false);
   const [focusAddBtn, setFocusAddBtn] = useState(false);
   const [memeLink, setMemeLink] = useState('');
 
@@ -28,6 +29,7 @@ const Home = () => {
     const formData = new FormData();
     formData.append('image', file);
     try {
+      setUploading(true);
       const config = {
         headers: {
           'Content-Type': 'multipart/form-data',
@@ -36,6 +38,7 @@ const Home = () => {
       const { data } = await axios.post(baseURL + '/upload', formData, config);
       if (data) {
         setMemeLink(data);
+        setUploading(false);
         setFocusAddBtn(true);
       }
     } catch (error) {
@@ -73,18 +76,21 @@ const Home = () => {
             Add Meme
           </button>
         </div>
-
-        <label className="w-full sm:w-32 flex items-center justify-center flex-col px-3 h-8 bg-gray-900 cursor-pointer hover:bg-indigo-600 text-white">
-          <div className="flex items-center space-x-1">
-            <i className="fas fa-cloud-upload-alt"></i>
-            <p className="text-sm">Upload</p>
-          </div>
-          <input
-            onChange={uploadMemeFileHandler}
-            type="file"
-            className="hidden"
-          />
-        </label>
+        {uploading ? (
+          <Loader small />
+        ) : (
+          <label className="w-full sm:w-32 flex items-center justify-center flex-col px-3 h-8 bg-gray-900 cursor-pointer hover:bg-indigo-600 text-white">
+            <div className="flex items-center space-x-1">
+              <i className="fas fa-cloud-upload-alt"></i>
+              <p className="text-sm">Upload</p>
+            </div>
+            <input
+              onChange={uploadMemeFileHandler}
+              type="file"
+              className="hidden"
+            />
+          </label>
+        )}
       </div>
 
       {/* memes grid view */}
