@@ -2,6 +2,8 @@ import asyncHandler from 'express-async-handler';
 import MemeModel from '../models/MemeModel';
 import fs from 'fs';
 import path from 'path';
+import moment from 'moment';
+import _ from 'lodash';
 
 export const createMeme = asyncHandler(async (req, res) => {
   const newMeme = await MemeModel.create(req.body);
@@ -44,5 +46,43 @@ export const deleteMeme = asyncHandler(async (req, res) => {
   } else {
     res.status(404);
     throw new Error('Meme not found!');
+  }
+});
+
+export const getSevenDaysMemes = asyncHandler(async (req, res) => {
+  const memes = await MemeModel.find({
+    createdAt: { $gte: moment().startOf('day').subtract(7, 'days').toDate() },
+  });
+  if (memes) {
+    interface DateWithTotalType {
+      createdAt: string;
+      total: number;
+    }
+    const withFormatedDate = memes.map((d: any) => ({
+      createdAt: moment(d.createdAt).format('l'),
+    }));
+
+    // covert date with total count
+    const DateWithTotal: DateWithTotalType[] = [];
+
+    withFormatedDate.forEach((element) => {
+      const index = DateWithTotal.findIndex(
+        (el) => el.createdAt === element.createdAt
+      );
+
+      if (index < 0) {
+        DateWithTotal.push({
+          createdAt: element.createdAt,
+          total: 1,
+        });
+      } else {
+        DateWithTotal[index].total++;
+      }
+    });
+
+    res.status(200).json(DateWithTotal);
+  } else {
+    res.status(404);
+    throw new Error('Memes not found!');
   }
 });

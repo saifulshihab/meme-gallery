@@ -35,8 +35,6 @@ app.use('/upload', uploadRoutes);
 
 app.use('/dist/uploads', express.static(path.join(__dirname, './uploads')));
 
-console.log(__dirname);
-
 // error middleware
 app.use(notFound);
 app.use(errorHandler);

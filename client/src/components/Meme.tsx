@@ -11,13 +11,13 @@ interface MemeProps {
 const Meme: React.FC<MemeProps> = ({ meme }) => {
   const [memeId, setMemeId] = useState('');
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const { values, dispatch } = useMeme();
 
   useEffect(() => {
     setMemeId(meme._id);
   }, [meme._id]);
 
-  console.log(values);
   const delMemeHandler = () => {
     console.log(memeId);
     deleteMeme(dispatch, memeId);
