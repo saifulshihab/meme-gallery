@@ -23,7 +23,9 @@ const Meme: React.FC<MemeProps> = ({ meme }) => {
     deleteMeme(dispatch, memeId);
   };
 
-  const img = meme?.image.includes('dist') ? baseURL + meme?.image : meme.image;
+  const img = meme?.image.includes('uploads')
+    ? baseURL + meme?.image
+    : meme.image;
 
   return (
     <div className="w-full h-full relative">
