@@ -21,7 +21,10 @@ app.use(express.urlencoded({ extended: false }));
 // cors
 app.use(
   cors({
-    origin: ['http://localhost:3000'],
+    origin: [
+      'http://localhost:3000',
+      'https://meme-gallery-web-shihab.netlify.app',
+    ],
     credentials: true,
   })
 );
@@ -33,7 +36,7 @@ app.get('/', (req, res) => {
 app.use('/api/meme', memeRoutes);
 app.use('/upload', uploadRoutes);
 
-app.use('/dist/uploads', express.static(path.join(__dirname, './uploads')));
+app.use('/uploads', express.static(path.join(__dirname, '../uploads')));
 
 // error middleware
 app.use(notFound);

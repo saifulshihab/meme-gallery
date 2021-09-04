@@ -2,6 +2,8 @@
   "name": "meme-gallery-backend",
   "version": "0.1.0",
   "scripts": {
+    "start": "node dist/index.js",
+    "postinstall": "tsc",
     "dev": "tsc -w",
     "dev2": "nodemon dist/index"
   },
@@ -15,6 +17,9 @@
     "moment": "^2.29.1",
     "mongoose": "^6.0.4",
     "multer": "^1.4.3"
+  },
+  "engines": {
+    "node": "14.17.5"
   },
   "devDependencies": {
     "@types/cors": "^2.8.12",
